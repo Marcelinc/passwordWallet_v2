@@ -18,10 +18,34 @@ const registerUser = asyncHandler(async (req,res) => {
             return Promise.reject('User exists')
         }
 
-        
+        if(type === 'sha256'){
+            //sha256 encryption
+        }
+        if(type === 'hmac'){
+            //hmac encryption
+        }
 
+        //Create user
+        const newUser = await User.create({login,password})
+
+        if(newUser)
+            res.status(201).json({
+                message: 'Success',
+                data: {
+                    id:newUser._id,
+                    login: newUser.login
+                }
+            })
+        else{
+            res.status(400)
+            return Promise.reject('Invalid user data')
+        }
     } catch(error){
         console.log(error)
         res.json({message:error})
     }
 })
+
+module.exports = {
+    registerUser
+}
