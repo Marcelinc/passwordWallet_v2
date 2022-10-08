@@ -14,7 +14,7 @@ const userSchema = mongoose.Schema({
         type: String,
         default: ''
     },
-    isPasswordKeptAsHash: {
+    isPasswordKeptAsHmac: {
         type: Boolean,
         default: false
     }

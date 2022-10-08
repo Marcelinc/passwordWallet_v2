@@ -19,7 +19,7 @@
     background-color: #f0d32d61;
   }
 
-  .registerForm{
+  .registerForm,.loginForm{
     background-image: linear-gradient(to left,#c45c5c,#5858c4);
     color: #eae7e2;
     display: grid;
@@ -39,6 +39,9 @@
     min-width: 100px;
     width: 10vw;
   }
+  .submit:hover{
+    cursor: pointer;
+  }
   .formElem input {
     width: 30vw;
     max-width: 300px;
@@ -47,3 +50,7 @@
     outline: none;
     margin: 15px;
   }
+
+
+  /*Login form*/
+  .loginForm{background-image: linear-gradient(to top right,#b1c45c,#5899c4);}

@@ -1,3 +1,4 @@
+import LoginForm from "../components/LoginForm"
 import Nav from "../components/Nav"
 import RegisterForm from "../components/RegisterForm"
 
@@ -6,7 +7,8 @@ function LandingPage() {
     <>
         <Nav/>
         <main>
-            <RegisterForm/>    
+            <RegisterForm/>
+            <LoginForm/>    
         </main>
     </>
   )
