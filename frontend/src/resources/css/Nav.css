@@ -1,0 +1,16 @@
+nav {
+    background-color: #bdd1e3;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 50px;
+  }
+  nav a{
+    text-decoration: none;
+    color: black;
+    font-weight: 500;
+    font-size: min(max(16px,5vw),22px);
+  }
+  nav a:hover{
+    opacity: .8;
+  }

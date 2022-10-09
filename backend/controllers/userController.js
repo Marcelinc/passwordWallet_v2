@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const asyncHandler = require('express-async-handler');
 const { SHA512, enc, lib, HmacSHA512 } = require("crypto-js");
+const jwt = require("jsonwebtoken");
 
 // @desc Register an user
 // @route POST /api/users/register
@@ -44,7 +45,8 @@ const registerUser = asyncHandler(async (req,res) => {
                 message: 'Success',
                 data: {
                     id:newUser._id,
-                    login: newUser.login
+                    login: newUser.login,
+                    token: generateToken(newUser._id)
                 }
             })
         else{
@@ -64,13 +66,50 @@ const registerUser = asyncHandler(async (req,res) => {
 const loginUser = asyncHandler(async (req,res) => {
     const {login,password} = req.body
 
+    //Check for user's login
     const user = await User.findOne({login})
     if(user){
         //check passwords
+        var givenPasswordHash
+        if(user.isPasswordKeptAsHmac)
+            givenPasswordHash = calculateHMAC(password,process.env.KEY)
+        if(!user.isPasswordKeptAsHmac)
+            givenPasswordHash = calculateSHA512(process.env.PEPPER+user.salt+password) 
+        
+        if(user.password != givenPasswordHash)
+            res.status(400).json({message: 'Bad login or password'})
+        
+        res.status(200).json({message:'Success',data:{
+            id: user._id,
+            login: user.login,
+            token: generateToken(user._id)
+        }})
     }
     if(!user){
         res.status(400).json({message:'There is no user with given login'})
     }
+})
+
+
+// @desc Verify user
+// @route GET /api/user/getMe
+// @access Public
+const verifyUser = asyncHandler(async (req,res) => {
+    
+    try{
+        const user = await User.findById(req.user.id, 'login _id')
+
+        if(!user)
+            res.status(400).json({message: 'Not authorized'})
+        
+        id(user) 
+            res.status(200).json({message: 'Authorized'})
+    } catch(error){
+        process.env.NODE_ENV === 'development' ? res.status(500).json('Server problem: '+error) :
+        res.status(500).json('Server problem')
+    }
+
+    
 })
 
 
@@ -86,6 +125,10 @@ const calculateHMAC = (password,key) => {
     return hashedPassword.toString(enc.Hex)
 }
 
+const generateToken = (id) => jwt.sign({id},process.env.JWT_SECRET,{expiresIn: '30d'})
+
 module.exports = {
-    registerUser
+    registerUser,
+    loginUser,
+    verifyUser
 }

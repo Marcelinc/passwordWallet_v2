@@ -1,12 +1,29 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
+import { AuthContext } from "../App"
 
 function LoginForm() {
+
+    const authData = useContext(AuthContext)
 
     const [login,setLogin] = useState('')
     const [password,setPassword] = useState('')
 
     const submit = () => {
-        console.log(login,password)
+        if(login && password)
+            fetch(process.env.REACT_APP_SERVER+'/user/login',{
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({login,password})
+            })
+            .then(res => res.json())
+            .then(res => {
+                if(res.message === 'Success'){
+                    authData.setLogged(true)
+                    authData.setToken(res.data.token)
+                    window.localStorage.setItem('userToken',res.data.token)
+                }
+            })
+            .catch(err => console.log(err))
     }
 
   return (
