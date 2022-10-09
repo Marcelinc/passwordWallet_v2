@@ -1,6 +1,6 @@
-Add .env in frontend folder with:
+Add .env in frontend folder with:<br/>
 REACT_APP_SERVER
-Add .env in main folder:
+Add .env in main folder:<br/>
 NODE_ENV
 PORT
 MONGO_DB
