@@ -53,4 +53,9 @@
 
 
   /*Login form*/
-  .loginForm{background-image: linear-gradient(to top right,#b1c45c,#5899c4);}
+  .loginForm{
+    background-image: linear-gradient(to top right,#b1c45c,#5899c4);
+    padding-top: 70px;
+    padding-bottom: 60px;
+    min-height: 450px;
+  }

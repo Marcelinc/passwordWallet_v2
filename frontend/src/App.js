@@ -3,6 +3,7 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import LandingPage from './pages/LandingPage';
 import { createContext, useEffect, useState } from 'react';
 import Dashboard from './pages/Dashboard';
+import LoginPage from './pages/LoginPage';
 
 export const AuthContext = createContext()
 
@@ -21,7 +22,10 @@ function App() {
       }
     })
     .then(res => res.json())
-    .then(res => console.log(res))
+    .then(res => {
+      if(res.message === 'Authorized')
+        setLogged(true)
+    })
     .catch(err => console.log(err))
     .finally(() => setLoading(false))
   },[token])
@@ -33,6 +37,7 @@ function App() {
         <Routes>
           <Route path='/' element={<LandingPage/>}/>
           <Route path='/dashboard' element={<Dashboard/>}/>
+          <Route path='/login' element={<LoginPage/>}/>
         </Routes>
       </AuthContext.Provider>
     </Router>

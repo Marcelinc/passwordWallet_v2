@@ -14,3 +14,7 @@ nav {
   nav a:hover{
     opacity: .8;
   }
+  #logout{
+    position: absolute;
+    right: 5vw;
+  }

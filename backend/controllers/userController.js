@@ -93,16 +93,16 @@ const loginUser = asyncHandler(async (req,res) => {
 
 // @desc Verify user
 // @route GET /api/user/getMe
-// @access Public
+// @access Private
 const verifyUser = asyncHandler(async (req,res) => {
     
     try{
-        const user = await User.findById(req.user.id, 'login _id')
+        const user = await User.findById(req.user.id, 'login')
 
         if(!user)
             res.status(400).json({message: 'Not authorized'})
         
-        id(user) 
+        if(user) 
             res.status(200).json({message: 'Authorized'})
     } catch(error){
         process.env.NODE_ENV === 'development' ? res.status(500).json('Server problem: '+error) :
