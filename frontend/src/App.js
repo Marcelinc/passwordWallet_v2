@@ -12,8 +12,10 @@ function App() {
   const [token,setToken] = useState(localStorage.getItem('userToken'))
   const [logged,setLogged] = useState(false)
   const [loading,setLoading] = useState(true)
+  const [password,setPassword] = useState('')
 
   useEffect(() => {
+    setPassword('')
     //Authentication
     setLoading(true)
     fetch(process.env.REACT_APP_SERVER+'/user/getMe',{
@@ -33,7 +35,7 @@ function App() {
   return (
     !loading &&
     <Router>
-      <AuthContext.Provider value={{token,setToken,logged,setLogged}}>
+      <AuthContext.Provider value={{token,setToken,logged,setLogged,password,setPassword}}>
         <Routes>
           <Route path='/' element={<LandingPage/>}/>
           <Route path='/dashboard' element={<Dashboard/>}/>

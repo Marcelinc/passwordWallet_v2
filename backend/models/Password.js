@@ -12,7 +12,7 @@ const passwordSchema = mongoose.Schema({
     },
     web_address: {
         type: String,
-        default: ''
+        require: true
     },
     description: {
         type: String,

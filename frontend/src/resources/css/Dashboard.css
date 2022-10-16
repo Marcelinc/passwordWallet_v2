@@ -1,0 +1,7 @@
+.eventTag{
+    color: rgb(126, 128, 17);
+}
+.eventTag:hover{
+    cursor: pointer;
+    color: rgb(114, 116, 15);
+}
