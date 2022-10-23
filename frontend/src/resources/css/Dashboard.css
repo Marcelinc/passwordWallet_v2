@@ -5,3 +5,31 @@
     cursor: pointer;
     color: rgb(114, 116, 15);
 }
+.userInfo{
+    background-color:blue;
+    color: azure;
+    padding: 15px;
+}
+.passwords{
+    background-color: antiquewhite;
+    display: grid;
+    justify-content: center;
+    text-align: center;
+    padding: 15px;
+}
+.passwords h2{
+    font-size: min(max(16px,5vw),32px);
+    padding-bottom: 20px;
+}
+.password-list{
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 90vw;
+    grid-gap: 20px 20px;
+}
+
+@media screen and (min-width:1240px) {
+    .password-list{
+        grid-template-columns: 1fr 1fr;
+    }
+}

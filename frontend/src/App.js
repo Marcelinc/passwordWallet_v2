@@ -9,12 +9,16 @@ export const AuthContext = createContext()
 
 function App() {
 
-  const [token,setToken] = useState(localStorage.getItem('userToken'))
+  const [token,setToken] = useState('')
   const [logged,setLogged] = useState(false)
   const [loading,setLoading] = useState(true)
   const [password,setPassword] = useState('')
+  const [login,setLogin] = useState('')
+  const [isHmac,setIsHmac] = useState(false)
 
   useEffect(() => {
+    setLogged(false)
+    setToken(localStorage.getItem('userToken'))
     setPassword('')
     //Authentication
     setLoading(true)
@@ -25,8 +29,11 @@ function App() {
     })
     .then(res => res.json())
     .then(res => {
-      if(res.message === 'Authorized')
+      if(res.message === 'Authorized'){
+        setLogin(res.data.login)
+        setIsHmac(res.data.isHmac)
         setLogged(true)
+      }
     })
     .catch(err => console.log(err))
     .finally(() => setLoading(false))
@@ -35,7 +42,7 @@ function App() {
   return (
     !loading &&
     <Router>
-      <AuthContext.Provider value={{token,setToken,logged,setLogged,password,setPassword}}>
+      <AuthContext.Provider value={{token,setToken,logged,setLogged,password,setPassword,login,isHmac}}>
         <Routes>
           <Route path='/' element={<LandingPage/>}/>
           <Route path='/dashboard' element={<Dashboard/>}/>

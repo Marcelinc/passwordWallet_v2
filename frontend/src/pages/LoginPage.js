@@ -10,7 +10,7 @@ function LoginPage() {
     const navigation = useNavigate()
   
     useEffect(() => {
-        authData.logged && navigation('/dashboard')
+       authData.logged && navigation('/dashboard')
     },[authData.logged])
 
     return (

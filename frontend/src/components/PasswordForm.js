@@ -10,7 +10,7 @@ function PasswordForm({form,show}) {
         if(password != ''){
             authData.setPassword(password)
             form(false)
-            show()
+            //show()
         }
             
     }

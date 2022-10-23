@@ -1,7 +1,7 @@
 import {useContext, useState} from 'react'
 import { AuthContext } from '../App'
 import '../resources/css/PasswordForm.css'
-function AddPasswordForm({form}) {
+function AddPasswordForm({form,passwords,setPasswords}) {
 
     const [password,setPassword] = useState('')
     const [web_address,setWebAddress] = useState('')
@@ -19,8 +19,12 @@ function AddPasswordForm({form}) {
             })
             .then(res => res.json())
             .then(res => {
-                if(res.message === 'Success')
+                if(res.message === 'Success'){
+                    console.log('res: ',res)
+                    setPasswords([res.data,...passwords])
                     form(false)
+                }
+                    
             })
             .catch(err => console.log(err))
     }

@@ -1,16 +1,18 @@
 import { useContext } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { AuthContext } from "../App"
 import '../resources/css/Nav.css'
 
 function Nav() {
 
   const authData = useContext(AuthContext)
+  const navigation = useNavigate()
 
   const logout = () => {
     authData.setToken('')
-    window.localStorage.setItem('usetToken','')
+    window.localStorage.setItem('userToken','')
     authData.setLogged(false)
+    navigation('/login')
   }
 
   return (

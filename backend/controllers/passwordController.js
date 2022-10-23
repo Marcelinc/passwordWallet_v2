@@ -29,7 +29,7 @@ const createPassword = asyncHandler(async (req,res) => {
             const newPassword = await Password.create({password:hash,id_user: id, web_address, description: nullableElements.description, login: nullableElements.login })
     
             if(newPassword)
-                res.status(200).json({message: 'Success'})
+                res.status(200).json({message: 'Success',data:newPassword})
             else res.status(500).json({message: 'Addind new password failed'})
         }
         else res.status(500).json({message: 'Failed during creating password'})
@@ -46,8 +46,8 @@ const createPassword = asyncHandler(async (req,res) => {
 const getAll = asyncHandler(async (req,res) => {
     const id = req.user._id
 
-    const passwords = await Password.find({user_id: id})
-    if(passwords && passwords.length > 0)
+    const passwords = await Password.find({id_user: id})
+    if(passwords)
         res.status(200).json({message: 'Success', data: passwords})
     else res.status(500).json({message: 'Problem with access to data'})
 })
@@ -57,31 +57,34 @@ const getAll = asyncHandler(async (req,res) => {
 // @route POST /api/password/decrypt
 // @access Private
 const decrypt = asyncHandler(async (req,res) => {
-    const {password,userPassword} = req.body
+    const {password,userMainPassword} = req.body
     const id = req.user._id
 
-    if(!userPassword)
+    if(!userMainPassword)
         res.status(400).json({message: "Can't show password. Not verified"})
-
-    //Check if user exists
-    const user = await User.findById(id,'password isPasswordKeptAsHmac')
-    if(!user)
-        res.status(500).json({message: 'Showing password not available'})
-
-    //Check if user passwords are the same
-    if(!checkPasswords(user,userPassword))
-        res.status(400).json({message: 'Not authorized'})
     else{
-        //Decrypt password
-        var key = calculateMD5(user.password)
-        if(key && key != 'Failed'){
-            var decrypted = AES.decrypt(password,key).toString(enc.Hex)
-            console.log('decrypted: ',decrypted)
-            if(decrypted)
-                res.status(200).json({message: 'Success',data:{decrypted}})
-            else res.status(500).json({message: 'Problem with decrypting password'})
-        } else res.status(500).json({message: 'Problem with decrypting password'})
+        //Check if user exists
+        const user = await User.findById(id,'password isPasswordKeptAsHmac salt')
+        if(!user)
+            res.status(500).json({message: 'Showing password not available'})
+        else{
+            //Check if user passwords are the same
+            if(!checkPasswords(user,userMainPassword))
+                res.status(400).json({message: 'Not authorized'})
+            else{
+                //Decrypt password
+                var key = calculateMD5(user.password)
+                if(key && key != 'Failed'){
+                    var decrypted = AES.decrypt(password,key).toString(enc.Utf8)
+                    if(decrypted)
+                        res.status(200).json({message: 'Success',data:{decrypted}})
+                    else res.status(500).json({message: 'Decrypting failed'})
+                } else res.status(500).json({message: 'Problem with decrypting password'})
+            }
+        }
     }
+   
+    
     
     
 })
@@ -94,8 +97,6 @@ const elements = (desc,login) => {
         elements.description = desc
     if(login && login != '')
         elements.login = login
-
-    console.log(elements)
 
     return elements
 }
@@ -110,7 +111,7 @@ const validate = (password,address) => {
 }
 
 const calculateMD5 = (userPassword) => {
-    var key = MD5(userPassword).toString(enc.Hex)
+    var key = MD5(userPassword).toString()
     if(key)
         return key
     else return 'Failed'
@@ -118,7 +119,7 @@ const calculateMD5 = (userPassword) => {
 
 const checkPasswords = (user,userPassword) => {
     if(!user.isPasswordKeptAsHmac){
-        if(SHA512(userPassword).toString(enc.Hex) === user.password)
+        if(SHA512(process.env.PEPPER+user.salt+userPassword).toString(enc.Hex) === user.password)
             return true
     }  
     else{
