@@ -131,7 +131,7 @@ const resetPassword = asyncHandler(async (req,res) => {
     //else{
         var update
         var newSalt=''
-        if(isPasswordKeptAsHmac){
+        if(user.isPasswordKeptAsHmac){
             update = calculateHMAC(newPassword,process.env.KEY)
         } else{
             newSalt = lib.WordArray.random(16)
