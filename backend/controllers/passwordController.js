@@ -132,5 +132,9 @@ const checkPasswords = (user,userPassword) => {
 module.exports = {
     createPassword,
     getAll,
-    decrypt
+    decrypt,
+    validate,
+    calculateMD5,
+    checkPasswords,
+    elements
 }

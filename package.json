@@ -6,7 +6,8 @@
   "scripts": {
     "start-server": "node backend/server.js",
     "dev-server": "nodemon backend/server.js",
-    "client": "npm start --prefix frontend"
+    "client": "npm start --prefix frontend",
+    "test": "mocha backend/test -r dotenv/config || true"
   },
   "author": "",
   "license": "ISC",
@@ -20,6 +21,8 @@
     "mongoose": "^6.6.4"
   },
   "devDependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.1.0",
     "nodemon": "^2.0.20"
   }
 }

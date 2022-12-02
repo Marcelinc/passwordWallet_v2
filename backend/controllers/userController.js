@@ -179,9 +179,10 @@ const comparePasswords = (givenPassword,user) => {
     //console.log('givenpassword: ',givenPassword)
     //console.log('userpassword: ',user.password)
     var equal = true;
-    if(user.isPasswordKeptAsHmac)
+    if(user.isPasswordKeptAsHmac){
         if(user.password != calculateHMAC(givenPassword,process.env.KEY))
             equal = false
+    }
     else{
         if(user.password != calculateSHA512(process.env.PEPPER+user.salt+givenPassword))
             equal = false
@@ -205,5 +206,9 @@ module.exports = {
     registerUser,
     loginUser,
     verifyUser,
-    resetPassword
+    resetPassword,
+    calculateHMAC,
+    calculateSHA512,
+    generateToken,
+    comparePasswords
 }
