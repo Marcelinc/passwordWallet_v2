@@ -28,6 +28,37 @@
     grid-gap: 20px 20px;
 }
 
+
+
+/*Login attempts list*/
+.successLogin{
+    color:rgb(117, 172, 35);
+}
+.failedLogin{
+    color:red;
+}
+.attempt-list {
+    width: 80vw;
+    min-width: 300px;
+}
+.attempt {
+    padding: 10px;
+    border: 3px solid #7d624e;
+    margin: 3px;
+    font-size: min(max(15px,3vw),25px);
+    cursor: default;
+    position: relative;
+}
+.expandAttempt{
+    position: absolute;
+    top: 14px;
+    right: 10px;
+}
+.expandAttempt:hover{
+    cursor: pointer;
+    opacity: 0.9;
+}
+
 @media screen and (min-width:1240px) {
     .password-list{
         grid-template-columns: 1fr 1fr;

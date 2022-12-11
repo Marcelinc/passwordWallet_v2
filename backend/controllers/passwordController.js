@@ -48,8 +48,8 @@ const getAll = asyncHandler(async (req,res) => {
 
     const passwords = await Password.find({id_user: id})
     if(passwords)
-        res.status(200).json({message: 'Success', data: passwords})
-    else res.status(500).json({message: 'Problem with access to data'})
+       res.status(200).json({message: 'Success', data: passwords})
+    //else res.status(500).json({message: 'Problem with access to data'})
 })
 
 

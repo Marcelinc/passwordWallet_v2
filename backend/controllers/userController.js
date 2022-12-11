@@ -3,6 +3,8 @@ const Password = require("../models/Password")
 const asyncHandler = require('express-async-handler');
 const { SHA512, enc, lib, HmacSHA512, MD5, AES } = require("crypto-js");
 const jwt = require("jsonwebtoken");
+const LoginAttempt = require("../models/LoginAttempt");
+const IPAddress = require("../models/IPAddress");
 // @desc Register an user
 // @route POST /api/users/register
 // @access Public
@@ -65,27 +67,54 @@ const registerUser = asyncHandler(async (req,res) => {
 // @access Public
 const loginUser = asyncHandler(async (req,res) => {
     const {login,password} = req.body
+    var correct
+    var device = req.headers['user-agent']
 
     //Check for user's login
     const user = await User.findOne({login})
     if(user){
         //check passwords
+        //calculate hash
         var givenPasswordHash
         if(user.isPasswordKeptAsHmac)
             givenPasswordHash = calculateHMAC(password,process.env.KEY)
         if(!user.isPasswordKeptAsHmac)
             givenPasswordHash = calculateSHA512(process.env.PEPPER+user.salt+password) 
         
-        if(user.password != givenPasswordHash)
+
+            //verify password - compare hash
+        if(user.password != givenPasswordHash){
+            correct = false
             res.status(400).json({message: 'Bad login or password'})
+        } else{
+
+            correct = true
+
+            //return response
+            res.status(200).json({message:'Success',data:{
+                id: user._id,
+                login: user.login,
+                token: generateToken(user._id)
+            }})
+        }
         
-        res.status(200).json({message:'Success',data:{
-            id: user._id,
-            login: user.login,
-            token: generateToken(user._id)
-        }})
-    }
-    if(!user){
+            //register login attempt
+
+            //check if ip address exists
+            var ipAddress = await IPAddress.findOne({addressIP: req.ip})
+
+            //save new address info
+            if(!ipAddress){
+                ipAddress = await IPAddress.create({addressIP: req.ip})
+            } else {
+                correct ? ipAddress.okLoginNum = ipAddress.okLoginNum+1 : ipAddress.badLoginNum = ipAddress.badLoginNum+1 
+                ipAddress.save()
+            }
+
+            LoginAttempt.create({correct,id_user:user._id,id_address: ipAddress._id, computer: device.substring(13,device.indexOf(')'))})
+
+
+    } else{
         res.status(400).json({message:'There is no user with given login'})
     }
 })
@@ -96,21 +125,20 @@ const loginUser = asyncHandler(async (req,res) => {
 // @access Private
 const verifyUser = asyncHandler(async (req,res) => {
     
-    try{
+    /*try{*/
         const user = await User.findById(req.user.id, 'login isPasswordKeptAsHmac')
 
-        if(!user)
+        /*if(!user)
             res.status(400).json({message: 'Not authorized'})
-        
-        if(user) 
-            res.status(200).json({message: 'Authorized',data:{
+        else*/ 
+            /*res.status(200).json({message: 'Authorized',data:{
                 login:user.login,
                 isHmac: user.isPasswordKeptAsHmac
-            }})
-    } catch(error){
+            }})*/
+   /* } catch(error){
         process.env.NODE_ENV === 'development' ? res.status(500).json('Server problem: '+error) :
         res.status(500).json('Server problem')
-    }
+    }*/
 })
 
 

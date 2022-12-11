@@ -7,6 +7,7 @@ function LoginForm() {
 
     const [login,setLogin] = useState('')
     const [password,setPassword] = useState('')
+    const [message,setMessage] = useState('')
 
     const submit = () => {
         if(login && password)
@@ -22,6 +23,7 @@ function LoginForm() {
                     authData.setToken(res.data.token)
                     window.localStorage.setItem('userToken',res.data.token)
                 }
+                setMessage(res.message)
             })
             .catch(err => console.log(err))
     }
@@ -40,6 +42,7 @@ function LoginForm() {
             <label className="formElem">
                 <button onClick={submit} className="submit" >Log in</button>
             </label>
+            {message && <p className="appMessage">{message}</p>}
         </div>
     </section>
   )

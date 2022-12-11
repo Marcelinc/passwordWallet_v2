@@ -24,7 +24,7 @@ function App() {
     setLoading(true)
     fetch(process.env.REACT_APP_SERVER+'/user/getMe',{
       headers: {
-        'Authorization': 'Bearer ' + token
+        'Authorization': 'Bearer ' + localStorage.getItem('userToken')
       }
     })
     .then(res => res.json())
@@ -33,11 +33,12 @@ function App() {
         setLogin(res.data.login)
         setIsHmac(res.data.isHmac)
         setLogged(true)
+        console.log(res.data)
       }
     })
     .catch(err => console.log(err))
     .finally(() => setLoading(false))
-  },[token])
+  },[])
 
   return (
     !loading &&

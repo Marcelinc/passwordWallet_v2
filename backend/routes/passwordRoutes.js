@@ -1,6 +1,6 @@
 const express = require('express')
 const { createPassword, getAll, decrypt } = require('../controllers/passwordController')
-const protect = require('../middleware/authMiddleware')
+const {protect} = require('../middleware/authMiddleware')
 const router = express.Router()
 
 router.post('/create',protect,createPassword)
