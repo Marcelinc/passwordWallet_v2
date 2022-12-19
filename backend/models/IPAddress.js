@@ -25,6 +25,11 @@ const IPAddressSchema = mongoose.Schema({
         type: String,
         require: true,
         default: ''
+    },
+    user_id: {
+        type: mongoose.Types.ObjectId,
+        ref: 'User',
+        require: true
     }
 })
 

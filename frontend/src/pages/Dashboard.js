@@ -80,12 +80,12 @@ function Dashboard() {
         </section> : <section className="passwords">
             <h2>Login attempts</h2>
             <div className="attempt-list">
-              {loginAttempts && loginAttempts.length > 0 ? loginAttempts.map(attempt => <p key={attempt._id} className='attempt'>
+              {loginAttempts && loginAttempts.length > 0 ? loginAttempts.map(attempt => <div key={attempt._id} className='attempt'>
                 <p>{attempt.correct ? <span className="successLogin">Successful</span> : <span className="failedLogin">Failed</span>} login attempt {attempt.createdAt.substring(11,19)} {attempt.createdAt.substring(0,10)}</p>
                 <p>Adres IP: {attempt.id_address.addressIP}</p>
                 <p>Urządzenie: {attempt.computer.split(';')[0]}, {attempt.computer.split(';')[1]}</p>
                 <FaCaretSquareDown className="expandAttempt"/>
-              </p>) : <p>There are no login attempts yet</p>}
+              </div>) : <p>There are no login attempts yet</p>}
             </div>
           </section>}
         {passwordForm && <Popup><AddPasswordForm form={setPasswordForm} setPasswords={setPasswords} passwords={passwords} /></Popup>}
