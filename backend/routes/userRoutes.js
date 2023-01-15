@@ -1,6 +1,6 @@
 const express = require('express')
 const { getLoginAttempts } = require('../controllers/loginAttemptController')
-const { registerUser, loginUser, verifyUser, resetPassword, logout } = require('../controllers/userController')
+const { registerUser, loginUser, verifyUser, resetPassword, logout, getUsers } = require('../controllers/userController')
 const {protect,authorize} = require('../middleware/authMiddleware')
 const router = express.Router()
 
@@ -10,5 +10,6 @@ router.get('/getMe',authorize,verifyUser)
 router.post('/resetPassword',protect,resetPassword)
 router.get('/loginAttempts/getAll',protect,getLoginAttempts)
 router.get('/logout',protect,logout)
+router.get('/getAll',protect,getUsers)
 
 module.exports = router

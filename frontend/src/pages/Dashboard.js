@@ -14,9 +14,12 @@ function Dashboard() {
   const authData = useContext(AuthContext)
   const [passwords,setPasswords] = useState([])
   const [loginAttempts,setAttempts] = useState([])
+  const [sharedPasswords,setShared] = useState([])
   const [passwordForm,setPasswordForm] = useState(false)
   const [mainPasswordForm,setMainForm] = useState(false)
   const [content,setContent] = useState('passwords')
+
+  const [mode,setMode] = useState('Read')
   const navigation = useNavigate()
 
   useEffect(() => {
@@ -52,7 +55,31 @@ function Dashboard() {
     })
     .catch(err => console.log(err))
 
+    //Fetch shared passwords
+    fetch(process.env.REACT_APP_SERVER+'/password/getShared',{
+      headers: {
+        'Authorization': 'Bearer ' + authData.token
+      }
+    })
+    .then(res => res.json())
+    .then(res => {
+      console.log('shared: ',res)
+      if(res.message === 'Success'){
+        setShared(res.data)
+      }
+    })
+    .catch(err => console.log(err))
+
   },[authData.logged,authData.password])
+
+  const changeMode = () => {
+    if(mode === 'Read'){
+      setMode('Edit')
+    }
+    if(mode === 'Edit'){
+      setMode('Read')
+    }
+  }
 
   return (
     <>
@@ -63,21 +90,24 @@ function Dashboard() {
             <p>Hello {authData.login}</p>
             <p>Account type: {authData.isHmac ? 'HMAC' : 'SHA512'}</p>
             <p>Your passwords: {passwords ? passwords.length : '0'}</p>
+            <button onClick={changeMode}>{mode} Mode</button>
           </div>
           <div className="password-operations">
             <p onClick={() => setContent('security')} className="eventTag">Security</p>
             <p onClick={() => setContent('passwords')} className="eventTag">My passwords</p>
+            <p onClick={() => setContent('sharedPasswords')} className="eventTag">Sharing passwords</p>
             <p onClick={() => setPasswordForm(true)} className='eventTag'>Add new</p>
-            <p onClick={() => setMainForm(true)} className='eventTag'>Change main password</p>
+            <p onClick={() => {mode === 'Edit' && setMainForm(true)}} className='eventTag'>Change main password</p>
           </div>
         </section>
         {content === 'passwords' ? <section className="passwords">
           <h2>My passwords</h2>
           <div className="password-list">
-            {passwords.length > 0 ? passwords.map(password => <Password key={password._id} data={password}/>) 
+            {passwords.length > 0 ? passwords.map(password => <Password key={password._id} data={password} mode={mode}/>) 
             : <p>You have no saved passwords</p>}
           </div> 
-        </section> : <section className="passwords">
+
+        </section> : content === 'security' ? <section className="passwords">
             <h2>Login attempts</h2>
             <div className="attempt-list">
               {loginAttempts && loginAttempts.length > 0 ? loginAttempts.map(attempt => <div key={attempt._id} className='attempt'>
@@ -86,6 +116,15 @@ function Dashboard() {
                 <p>Urządzenie: {attempt.computer.split(';')[0]}, {attempt.computer.split(';')[1]}</p>
                 <FaCaretSquareDown className="expandAttempt"/>
               </div>) : <p>There are no login attempts yet</p>}
+            </div>
+
+          </section> : <section className="passwords">
+            <h2>Sharing passwords</h2>
+            <div className="shared-list">
+              {sharedPasswords && sharedPasswords.length > 0 ? sharedPasswords.map(psswd => <p key={psswd.sh._id}>
+                Password: <span className="sharedPassword">{psswd.decryptedPassword} </span> 
+                from <span className="sharedOwner">{psswd.sh.id_owner.login}</span>
+              </p>) : <p>You don't have any shared passwords</p>}
             </div>
           </section>}
         {passwordForm && <Popup><AddPasswordForm form={setPasswordForm} setPasswords={setPasswords} passwords={passwords} /></Popup>}

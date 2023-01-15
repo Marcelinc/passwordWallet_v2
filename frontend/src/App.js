@@ -43,7 +43,7 @@ function App() {
   return (
     !loading &&
     <Router>
-      <AuthContext.Provider value={{token,setToken,logged,setLogged,password,setPassword,login,isHmac}}>
+      <AuthContext.Provider value={{token,setToken,logged,setLogged,password,setPassword,login,setLogin,isHmac,setIsHmac}}>
         <Routes>
           <Route path='/' element={<LandingPage/>}/>
           <Route path='/dashboard' element={<Dashboard/>}/>

@@ -59,6 +59,13 @@
     opacity: 0.9;
 }
 
+.sharedPassword{
+    color:rgb(62, 116, 9);
+}
+.sharedOwner{
+    color:crimson;
+}
+
 @media screen and (min-width:1240px) {
     .password-list{
         grid-template-columns: 1fr 1fr;

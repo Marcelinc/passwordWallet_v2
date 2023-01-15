@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const LoginAttempt = require("../models/LoginAttempt");
 const IPAddress = require("../models/IPAddress");
 const { findById } = require("../models/User");
+const SharedPassword = require("../models/SharedPassword");
 // @desc Register an user
 // @route POST /api/users/register
 // @access Public
@@ -107,6 +108,7 @@ const loginUser = asyncHandler(async (req,res) => {
                     res.status(200).json({message:'Success',data:{
                         id: user._id,
                         login: user.login,
+                        isHmac: user.isPasswordKeptAsHmac,
                         token: generateToken(user._id)
                     }})
                 }
@@ -218,6 +220,9 @@ const resetPassword = asyncHandler(async (req,res) => {
                 Password.updateOne({_id:pswd._id},{password: encryptPasswordAgain(pswd.password,key,user.password)}).exec()
             })
 
+            //change shared passwords status
+            const updatedShared = await SharedPassword.updateMany({id_owner: user._id,status: 'valid'},{$set: {status: 'invalid'}})
+
 
             //commit
             if(updatedUser && updatedPasswords)
@@ -243,6 +248,22 @@ const logout = asyncHandler(async (req,res) => {
         res.status(500).json({message: 'Something gone wrong'})
     }
 })
+
+
+
+// @desc Get users list
+// @route GET /api/user/getAll
+// @access Private
+const getUsers = asyncHandler(async (req,res) => {
+    const list = await User.find({},'login')
+    //console.log('list: ',list)
+    if(list){
+        res.status(200).json({message: 'Success', users: list})
+    } else{
+        res.status(500).json({message: 'Server error with fetching users'})
+    }
+})
+
 
 
 //Additional functions
@@ -307,5 +328,6 @@ module.exports = {
     calculateSHA512,
     generateToken,
     comparePasswords,
-    logout
+    logout,
+    getUsers
 }
