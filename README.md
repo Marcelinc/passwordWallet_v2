@@ -1,4 +1,4 @@
-###Password wallet app
+###Password wallet app</br>
 ###Built With
 * [![JavaScript][JavaScript.img]][JavaScript-url]
 * [![React][React.js]][React-url]
