@@ -3,6 +3,7 @@
 * [![JavaScript][JavaScript.img]][JavaScript-url]
 * [![React][React.js]][React-url]
 * [![Express][Express.js]][Express-url]
+* [![JWT][JWT.img]][JWT-url]
 * [![MongoDB][Mongo.db]][Mongo-url]
 * [![MochaJS][Mocha.js]][Mocha-url]
 * [![ChaiJS][Chai.js]][Chai-url]
@@ -32,3 +33,5 @@ JWT_SECRET
 [Mocha-url]: https://mochajs.org/
 [Chai.js]: https://img.shields.io/badge/chai.js-323330?style=for-the-badge&logo=chai&logoColor=red
 [Chai-url]: https://www.chaijs.com/
+[JWT.img]: https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens
+[JWT-url]: https://jwt.io/
