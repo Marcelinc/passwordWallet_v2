@@ -4,6 +4,7 @@ import { AuthContext } from "../App"
 import LoginForm from "../components/LoginForm"
 import Nav from "../components/Nav"
 import RegisterForm from "../components/RegisterForm"
+import '../resources/css/LandingPage.css'
 
 function LandingPage() {
 
@@ -18,7 +19,7 @@ function LandingPage() {
     <>
         <Nav/>
         <main>
-            <section>Section1</section>
+            <section className="accountType">Choose account type</section>
             <RegisterForm/>   
         </main>
     </>

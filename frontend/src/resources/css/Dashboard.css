@@ -6,12 +6,12 @@
     color: rgb(114, 116, 15);
 }
 .userInfo{
-    background-color:blue;
+    background-color:rgb(45, 45, 117);
     color: azure;
     padding: 15px;
 }
 .passwords{
-    background-color: antiquewhite;
+    
     display: grid;
     justify-content: center;
     text-align: center;

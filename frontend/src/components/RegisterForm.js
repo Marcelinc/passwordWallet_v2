@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react"
 import '../resources/css/RegisterForm.css'
+import { useNavigate } from "react-router-dom"
 
 function RegisterForm() {
 
     const [type,setType] = useState('')
     const [login,setLogin] = useState('')
     const [password,setPassword] = useState('')
+    const [message,setMessage] = useState('')
+
+    const navigation = useNavigate()
 
     const submit = () => {
         console.log(type,login,password)
@@ -17,6 +21,10 @@ function RegisterForm() {
         .then(res => res.json())
         .then(res => {
             console.log(res)
+            res.message && setMessage(res.message)
+            if(res.message === 'Success') {
+                navigation('/login')
+            }
         })
     }
 
@@ -37,7 +45,9 @@ function RegisterForm() {
             <label className="formElem">
                 <button onClick={submit} className="submit" >Submit</button>
             </label>
+            <p className="appMessage">{message}</p>
         </div>}
+        
     </section>
   )
 }
