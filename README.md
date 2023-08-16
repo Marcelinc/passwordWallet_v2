@@ -1,6 +1,6 @@
-###Password wallet app</br>
+## Password wallet app</br>
 An web application enabling secure storage of passwords for various services. The security mechanisms embedded in it allow users to control and monitor unauthorized login attempts by blocking account access and providing information about such attempts. </br>
-###Built With
+## Built With
 * [![JavaScript][JavaScript.img]][JavaScript-url]
 * [![React][React.js]][React-url]
 * [![Express][Express.js]][Express-url]
@@ -10,7 +10,7 @@ An web application enabling secure storage of passwords for various services. Th
 * [![ChaiJS][Chai.js]][Chai-url]
 
 
-###Env variables
+## Env variables
 Add .env in frontend folder with:<br/>
 REACT_APP_SERVER<br/>
 Add .env in main folder:<br/>
@@ -21,7 +21,7 @@ PEPPER,
 KEY,
 JWT_SECRET
 
-###Screens
+## Screens
 ![obraz](https://github.com/Marcelinc/passwordWallet_v2/assets/82237491/d151e924-1028-4b2e-a637-d733e388fb17)
 ![obraz](https://github.com/Marcelinc/passwordWallet_v2/assets/82237491/04faba9c-37a4-4008-b0ed-ba0d150491fd)
 ![obraz](https://github.com/Marcelinc/passwordWallet_v2/assets/82237491/97ddb2e2-c3e0-4f92-b4f0-dc68a4762f74)
