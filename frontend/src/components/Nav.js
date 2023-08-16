@@ -9,10 +9,20 @@ function Nav() {
   const navigation = useNavigate()
 
   const logout = () => {
-    authData.setToken('')
-    window.localStorage.setItem('userToken','')
-    authData.setLogged(false)
-    navigation('/login')
+    fetch(process.env.REACT_APP_SERVER+'/user/logout',{
+      headers: {
+        'Authorization': 'Bearer ' + authData.token
+      }
+    })
+    .then(res => res.json())
+    .then(res => {
+      console.log(res)
+      authData.setToken('')
+      window.localStorage.setItem('userToken','')
+      authData.setLogged(false)
+      navigation('/login')
+    })
+    
   }
 
   return (

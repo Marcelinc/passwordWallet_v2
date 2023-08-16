@@ -5,6 +5,8 @@ const { SHA512, enc, lib, HmacSHA512, MD5, AES } = require("crypto-js");
 const jwt = require("jsonwebtoken");
 const LoginAttempt = require("../models/LoginAttempt");
 const IPAddress = require("../models/IPAddress");
+const { findById } = require("../models/User");
+const SharedPassword = require("../models/SharedPassword");
 // @desc Register an user
 // @route POST /api/users/register
 // @access Public
@@ -67,51 +69,90 @@ const registerUser = asyncHandler(async (req,res) => {
 // @access Public
 const loginUser = asyncHandler(async (req,res) => {
     const {login,password} = req.body
-    var correct
+    var correct,locked
     var device = req.headers['user-agent']
 
     //Check for user's login
     const user = await User.findOne({login})
     if(user){
-        //check passwords
-        //calculate hash
-        var givenPasswordHash
-        if(user.isPasswordKeptAsHmac)
-            givenPasswordHash = calculateHMAC(password,process.env.KEY)
-        if(!user.isPasswordKeptAsHmac)
-            givenPasswordHash = calculateSHA512(process.env.PEPPER+user.salt+password) 
+
+        //check if ip address exists
+        var ipAddress = await IPAddress.findOne({addressIP: req.ip, user_id: user._id})
+
+        //save new address info
+        if(!ipAddress){
+            ipAddress = await IPAddress.create({addressIP: req.ip, user_id: user._id})
+        } 
         
+        //account not locked permanent
+        if(!ipAddress.permanentLock){
+            //if account not locked 
+            if(ipAddress.tempLock < Date.now()){
+                //check passwords
+                //calculate hash
+                var givenPasswordHash
+                if(user.isPasswordKeptAsHmac)
+                    givenPasswordHash = calculateHMAC(password,process.env.KEY)
+                if(!user.isPasswordKeptAsHmac)
+                    givenPasswordHash = calculateSHA512(process.env.PEPPER+user.salt+password) 
+                
 
-            //verify password - compare hash
-        if(user.password != givenPasswordHash){
-            correct = false
-            res.status(400).json({message: 'Bad login or password'})
-        } else{
+                    //verify password - compare hash
+                if(user.password != givenPasswordHash){
+                    correct = false
+                    res.status(400).json({message: 'Bad login or password'})
+                } else{
 
-            correct = true
+                    correct = true
+                    //return response
+                    res.status(200).json({message:'Success',data:{
+                        id: user._id,
+                        login: user.login,
+                        isHmac: user.isPasswordKeptAsHmac,
+                        token: generateToken(user._id)
+                    }})
+                }
 
-            //return response
-            res.status(200).json({message:'Success',data:{
-                id: user._id,
-                login: user.login,
-                token: generateToken(user._id)
-            }})
-        }
-        
-            //register login attempt
 
-            //check if ip address exists
-            var ipAddress = await IPAddress.findOne({addressIP: req.ip})
+                //register login attempt
 
-            //save new address info
-            if(!ipAddress){
-                ipAddress = await IPAddress.create({addressIP: req.ip})
-            } else {
-                correct ? ipAddress.okLoginNum = ipAddress.okLoginNum+1 : ipAddress.badLoginNum = ipAddress.badLoginNum+1 
-                ipAddress.save()
+                //check login attempts numb
+                if(ipAddress){
+                    if(correct) ipAddress.okLoginNum = ipAddress.okLoginNum+1
+                    correct ? ipAddress.lastBadLoginNum = 0 : ipAddress.lastBadLoginNum = ipAddress.lastBadLoginNum+1
+                    ipAddress.save()
+                    }
+
+                //temp lock nr 1
+                if(ipAddress.lastBadLoginNum === 2){
+                    ipAddress.tempLock = Date.now()+5000
+                }
+                if(ipAddress.lastBadLoginNum === 3){
+                    ipAddress.tempLock = Date.now()+10000
+                }
+                if(ipAddress.lastBadLoginNum === 4){
+                    ipAddress.tempLock = Date.now()+120000
+                }
+                if(ipAddress.lastBadLoginNum > 4){
+                    ipAddress.permanentLock = true
+                }
+
+                //save login attempt
+                LoginAttempt.create({correct,id_user:user._id,id_address: ipAddress._id, computer: device.substring(13,device.indexOf(')'))})
+
+
+            } else{
+                let time = Math.round((ipAddress.tempLock - Date.now())/1000)
+                //console.log('sec: ',time)
+
+                res.status(200).json({message: `Wait ${calculateTime(time)} until next login attempt`})
             }
+                //console.log('time: ',(Math.round((ipAddress.tempLock - Date.now())/-60000)*1)/1)
+        }else{
+            res.status(200).json({message: 'Your account has been locked because of too many unauthorized login attempts'})
+        }
 
-            LoginAttempt.create({correct,id_user:user._id,id_address: ipAddress._id, computer: device.substring(13,device.indexOf(')'))})
+        
 
 
     } else{
@@ -175,9 +216,12 @@ const resetPassword = asyncHandler(async (req,res) => {
             //update passwords
             var updatedPasswords = await Password.find({id_user: user._id})
             updatedPasswords.map(pswd => {
-                console.log('userpassword:',user.password)
+                //console.log('userpassword:',user.password)
                 Password.updateOne({_id:pswd._id},{password: encryptPasswordAgain(pswd.password,key,user.password)}).exec()
             })
+
+            //change shared passwords status
+            const updatedShared = await SharedPassword.updateMany({id_owner: user._id,status: 'valid'},{$set: {status: 'invalid'}})
 
 
             //commit
@@ -188,6 +232,38 @@ const resetPassword = asyncHandler(async (req,res) => {
         } else res.status(500).json({message: "Can't update passwords"})
    // }
 })
+
+
+// @desc Log out user
+// @route GET /api/user/logout
+// @access Private
+const logout = asyncHandler(async (req,res) => {
+    const id = req.user.id
+    var ipAddress = await IPAddress.findOne({user_id: id, addressIP: req.ip})
+    if(ipAddress){
+        ipAddress.okLoginNum = ipAddress.okLoginNum-1
+        ipAddress.save()
+        res.status(200).json({message: 'Success'})
+    } else{
+        res.status(500).json({message: 'Something gone wrong'})
+    }
+})
+
+
+
+// @desc Get users list
+// @route GET /api/user/getAll
+// @access Private
+const getUsers = asyncHandler(async (req,res) => {
+    const list = await User.find({},'login')
+    //console.log('list: ',list)
+    if(list){
+        res.status(200).json({message: 'Success', users: list})
+    } else{
+        res.status(500).json({message: 'Server error with fetching users'})
+    }
+})
+
 
 
 //Additional functions
@@ -228,6 +304,19 @@ const encryptPasswordAgain = (password,key,userPassword) => {
     return encryptAgain
 }
 
+const calculateTime = (time) => {
+    let timeString
+    let minutes
+    if(time < 60)
+        timeString = time+' seconds'
+    if(time > 60){
+        minutes = Math.round(time/60)*1
+        timeString = minutes+' minutes'
+    }
+    //console.log('time: ',timeString)
+    return timeString
+}
+
 const generateToken = (id) => jwt.sign({id},process.env.JWT_SECRET,{expiresIn: '30d'})
 
 module.exports = {
@@ -238,5 +327,7 @@ module.exports = {
     calculateHMAC,
     calculateSHA512,
     generateToken,
-    comparePasswords
+    comparePasswords,
+    logout,
+    getUsers
 }

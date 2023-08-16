@@ -2,6 +2,7 @@ const Password = require('../models/Password')
 const asyncHandler = require('express-async-handler')
 const { AES, MD5, enc, SHA512, HmacSHA512 } = require('crypto-js')
 const User = require('../models/User')
+const SharedPassword = require('../models/SharedPassword')
 
 // @desc Create a password
 // @route POST /api/password/create
@@ -83,10 +84,64 @@ const decrypt = asyncHandler(async (req,res) => {
             }
         }
     }
-   
-    
-    
-    
+})
+
+// @desc Share password to other users
+// @route POST /api/password/share
+// @access Private
+const sharePassword = asyncHandler(async (req,res) => {
+    const id_password = req.body.passwordId
+    const id_owner = req.user.id
+    const id_receiver = req.body.receiverId
+
+    if(id_password){
+        //check if password exists
+        const psswd = await Password.findById(id_password)
+
+        if(psswd){
+            //check if password has been shared
+            const isShared = await SharedPassword.findOne({id_password,status: 'valid',id_receiver});
+            if(isShared){
+                //password has been shared
+                res.status(400).json({message: 'Password has beed shared. You can`t share it again'})
+            } else {
+                //share password
+                const share = await SharedPassword.create({id_owner,id_password,id_receiver})
+                if(share)
+                    res.status(200).json({message: 'Success'})
+                else
+                    res.status(500).json({message: 'Server error with sharing password'})
+            }
+        } else
+            res.status(400).json('There are no passwords to share')
+    } else{
+        res.status(400).json('Bad request')
+    }
+})
+
+
+// @desc Get shared passwords 
+// @route Get /api/password/shared
+// @access Private
+const getShared = asyncHandler(async (req,res) => {
+    const id_receiver = req.user.id
+    var returnDecodedShare
+
+    const shared = await SharedPassword.find({id_receiver, status: 'valid'}).populate('id_owner','login').populate('id_password')
+    if(shared){
+        if(shared.length > 0){
+            //decode password
+            var mainPassword = await User.findById(shared[0].id_owner._id,'password isPasswordKeptAsHmac')
+            var key = calculateMD5(mainPassword.password)
+            if(key && key != 'Failed'){
+                returnDecodedShare = shared.map(sh => {return {sh,decryptedPassword : AES.decrypt(sh.id_password.password,key).toString(enc.Utf8)}})
+            }
+            //console.log(returnDecodedShare)
+        }
+        res.status(200).json({message: 'Success', data: returnDecodedShare})
+    } else {
+        res.status(500).json({message:'Server problem with fetching shared passwords'})
+    }
 })
 
 
@@ -136,5 +191,7 @@ module.exports = {
     validate,
     calculateMD5,
     checkPasswords,
-    elements
+    elements,
+    sharePassword,
+    getShared
 }

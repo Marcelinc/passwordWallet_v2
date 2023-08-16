@@ -19,6 +19,8 @@ function LoginForm() {
             .then(res => res.json())
             .then(res => {
                 if(res.message === 'Success'){
+                    authData.setLogin(res.data.login)
+                    authData.setIsHmac(res.data.isHmac)
                     authData.setLogged(true)
                     authData.setToken(res.data.token)
                     window.localStorage.setItem('userToken',res.data.token)
