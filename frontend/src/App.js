@@ -24,7 +24,8 @@ function App() {
     setLoading(true)
     fetch(process.env.REACT_APP_SERVER+'/user/getMe',{
       headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('userToken')
+        'Authorization': 'Bearer ' + localStorage.getItem('userToken'),
+        'Access-Control-Allow-Origin': '*'
       }
     })
     .then(res => res.json())
