@@ -13,7 +13,11 @@ const app = express()
 connectDB()
 
 //Middlewares
-app.use(cors())
+app.use(cors({
+    origin: ["https://password-wallet-v2.vercel.app/"],
+    methods: ["POST","GET"],
+    credentials: true
+}))
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 
