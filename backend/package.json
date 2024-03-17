@@ -1,8 +1,11 @@
 {
-  "name": "passwordwallet",
+  "name": "backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "passwordwallet backend",
+  "main": "server.js",
+  "directories": {
+    "test": "test"
+  },
   "scripts": {
     "start-server": "node backend/server.js",
     "dev-server": "nodemon backend/server.js",
@@ -18,8 +21,7 @@
     "express": "^4.18.1",
     "express-async-handler": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.6.4",
-    "react-icons": "^4.7.1"
+    "mongoose": "^6.6.4"
   },
   "devDependencies": {
     "chai": "^4.3.7",
