@@ -11,9 +11,9 @@ An web application enabling secure storage of passwords for various services. Th
 
 
 ## Env variables
-Add .env in frontend folder with:<br/>
+# Add .env in frontend folder with:
 REACT_APP_SERVER<br/>
-Add .env in main folder:<br/>
+# Add .env in backend folder:
 NODE_ENV,
 PORT,
 MONGO_DB,
