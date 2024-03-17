@@ -21,11 +21,8 @@ PEPPER,
 KEY,
 JWT_SECRET
 
-## Screens
-![obraz](https://github.com/Marcelinc/passwordWallet_v2/assets/82237491/d151e924-1028-4b2e-a637-d733e388fb17)
-![obraz](https://github.com/Marcelinc/passwordWallet_v2/assets/82237491/04faba9c-37a4-4008-b0ed-ba0d150491fd)
-![obraz](https://github.com/Marcelinc/passwordWallet_v2/assets/82237491/97ddb2e2-c3e0-4f92-b4f0-dc68a4762f74)
-![obraz](https://github.com/Marcelinc/passwordWallet_v2/assets/82237491/8d924585-2d02-4267-8601-e2ad31a408af)
+## LIVE
+https://password-wallet-v2-u9t1.vercel.app/
 
 
 
