@@ -7,10 +7,9 @@
     "test": "test"
   },
   "scripts": {
-    "start-server": "node backend/server.js",
-    "dev-server": "nodemon backend/server.js",
-    "client": "npm start --prefix frontend",
-    "test": "mocha backend/test -r dotenv/config || true"
+    "start-server": "node index.js",
+    "dev-server": "nodemon index.js",
+    "test": "mocha test -r dotenv/config || true"
   },
   "author": "",
   "license": "ISC",
