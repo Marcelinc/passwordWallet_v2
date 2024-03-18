@@ -4,6 +4,7 @@ import LandingPage from './pages/LandingPage';
 import { createContext, useEffect, useState } from 'react';
 import Dashboard from './pages/Dashboard';
 import LoginPage from './pages/LoginPage';
+import Loader from './components/Loader';
 
 export const AuthContext = createContext()
 
@@ -42,7 +43,9 @@ function App() {
   },[])
 
   return (
-    !loading &&
+    loading ? <div className='container'>
+      <Loader/>
+    </div> :
     <Router>
       <AuthContext.Provider value={{token,setToken,logged,setLogged,password,setPassword,login,setLogin,isHmac,setIsHmac}}>
         <Routes>
