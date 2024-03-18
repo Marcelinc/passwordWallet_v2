@@ -12,7 +12,6 @@ const app = express()
 
 //Middlewares
 app.use(cors({
-    origin: ["https://password-wallet-v2-u9t1.vercel.app"],
     methods: ["POST","GET"],
     credentials: true
 }))
