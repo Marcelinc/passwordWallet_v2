@@ -22,7 +22,7 @@ KEY,
 JWT_SECRET
 
 ## LIVE
-https://password-wallet-v2-u9t1.vercel.app/
+https://password-wallet-v2-frontend.vercel.app/
 
 
 
