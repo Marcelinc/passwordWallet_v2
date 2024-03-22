@@ -5,9 +5,20 @@
 }
 #root{
     min-width: 300px;
-    height: 100vh;
+    min-height: 100vh;
     background-color: #bdd1e3;
 }
+.container{
+    min-height: 100vh;
+    min-width: 300px;
+    color: azure;
+  }
+.app{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .appMessage{
-    color:rgb(22, 6, 6);
+    color:rgb(66, 8, 8);
+    padding: 1em;
 }

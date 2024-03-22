@@ -1,14 +1,15 @@
 import { useContext, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { AuthContext } from '../App'
-import LoginForm from '../components/LoginForm'
 import Nav from '../components/Nav'
+import RegisterForm from '../components/RegisterForm'
 import '../resources/css/FormPage.css'
 
-function LoginPage() {
+function RegisterPage() {
 
     const authData = useContext(AuthContext)
     const navigation = useNavigate()
+    const location = useLocation()
   
     useEffect(() => {
        authData.logged && navigation('/dashboard')
@@ -18,10 +19,10 @@ function LoginPage() {
       <>
         <Nav/>
         <main className='formPage'>
-            <LoginForm/>
+            <RegisterForm accountType={location.state.type}/>
         </main>
       </>
     )
   }
   
-  export default LoginPage
+  export default RegisterPage
