@@ -1,39 +1,66 @@
-import { useEffect, useState } from "react"
-import '../resources/css/RegisterForm.css'
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-function RegisterForm() {
+function RegisterForm({accountType}) {
 
-    const [type,setType] = useState('')
+    const [type,setType] = useState(accountType)
     const [login,setLogin] = useState('')
     const [password,setPassword] = useState('')
     const [message,setMessage] = useState('')
+    const [processing,setProcessing] = useState(false);
+    const [validateForm,setValidateForm] = useState(false);
 
     const navigation = useNavigate()
 
+    console.log(type)
+
     const submit = () => {
-        console.log(type,login,password)
-        fetch(process.env.REACT_APP_SERVER+'/user/register',{
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({login,password,type})
-        })
-        .then(res => res.json())
-        .then(res => {
-            console.log(res)
-            res.message && setMessage(res.message)
-            if(res.message === 'Success') {
-                navigation('/login')
-            }
-        })
+        if(checkFormValidation()){
+            //form validate
+            setProcessing(true);
+            fetch(process.env.REACT_APP_SERVER+'/user/register',{
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({login,password,type})
+            })
+            .then(res => res.json())
+            .then(res => {
+                console.log(res)
+                res.message && setMessage(res.message)
+                if(res.message === 'Success') {
+                    navigation('/login')
+                }
+            })
+            .catch(err => {
+                setMessage("Can't create an account. Try later");
+            })
+            .finally(() => setProcessing(false));
+        } else{
+            //form not valdiate
+            setMessage('Missing data in form')
+        }
+        
+    }
+
+    const onTypeChange = e => {
+        setType(e.target.value);
+    }
+
+    const checkFormValidation = () => {
+        let validate = true;
+        if(!login)
+            validate = false;
+        if(!password)
+            validate = false;
+        if(type !== 'hmac' && type !== 'sha512')
+            validate = false;
+        return validate;
     }
 
   return (
-    <section className="form">
-        {type === '' ? <div className="typeSelect">
-            <div className="type" onClick={() => setType('sha512')}><p>SHA512</p></div>
-            <div className="type" onClick={() => setType('hmac')}><p>HMAC</p></div>
-        </div> : <div className="registerForm">
+    <div className="form-container">
+        <h1>Create an account</h1>
+        <div className="form">
             <label className="formElem">
                 <p>Login</p>
                 <input type='text' value={login} onChange={e => setLogin(e.target.value)}/>
@@ -42,13 +69,23 @@ function RegisterForm() {
                 <p>Password</p>
                 <input type='password' value={password} onChange={e => setPassword(e.target.value)}/>    
             </label>
-            <label className="formElem">
-                <button onClick={submit} className="submit" >Submit</button>
-            </label>
-            <p className="appMessage">{message}</p>
-        </div>}
+            <div className="formRadio">
+                <label>
+                    <input type="radio" name="accountType" value='sha512' id="sha512" checked={type === 'sha512'} onChange={onTypeChange}/>
+                    SHA512
+                </label>
+                <label>
+                    <input type="radio" name="accountType" value='hmac' id="hmac" checked={type === 'hmac'} onChange={onTypeChange}/>
+                    HMAC
+                </label>
+            </div>
+            <div className="formElem">
+                <button onClick={submit} className="submit" >Register</button>
+            </div>
+            <p className="appMessage">{processing ? 'Creating account...' : message}</p>
+        </div>
         
-    </section>
+    </div>
   )
 }
 

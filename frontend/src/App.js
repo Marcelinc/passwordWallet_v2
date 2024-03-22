@@ -4,7 +4,9 @@ import LandingPage from './pages/LandingPage';
 import { createContext, useEffect, useState } from 'react';
 import Dashboard from './pages/Dashboard';
 import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 import Loader from './components/Loader';
+import '../src/resources/css/Forms.css';
 
 export const AuthContext = createContext()
 
@@ -43,7 +45,7 @@ function App() {
   },[])
 
   return (
-    loading ? <div className='container'>
+    loading ? <div className='container app'>
       <Loader/>
     </div> :
     <Router>
@@ -52,6 +54,7 @@ function App() {
           <Route path='/' element={<LandingPage/>}/>
           <Route path='/dashboard' element={<Dashboard/>}/>
           <Route path='/login' element={<LoginPage/>}/>
+          <Route path='/register' element={<RegisterPage/>}/>
         </Routes>
       </AuthContext.Provider>
     </Router>

@@ -20,7 +20,7 @@ const registerUser = asyncHandler(async (req,res) => {
     try{
         const user = await User.findOne({login})
         if(user){
-            res.status(400)
+            res.status(400).json({message: 'User already registered'})
             return Promise.reject('User exists')
         }
 
