@@ -44,7 +44,8 @@ function ResetPasswordForm({form,setPasswords}) {
     fetch(process.env.REACT_APP_SERVER+'/password/getAll',{
         headers: {
         'Content-Type':'application/json',
-        'Authorization': 'Bearer ' + authData.token
+        'Authorization': 'Bearer ' + authData.token,
+        'Access-Control-Allow-Origin': '*'
         }
     })
     .then(res => res.json())

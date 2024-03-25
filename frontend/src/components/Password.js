@@ -27,7 +27,8 @@ function Password({data,mode}) {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + authData.token
+            'Authorization': 'Bearer ' + authData.token,
+            'Access-Control-Allow-Origin': '*'
           },
           body: JSON.stringify({password: data.password,userMainPassword: authData.password})
         })

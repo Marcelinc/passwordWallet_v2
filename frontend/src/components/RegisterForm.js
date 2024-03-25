@@ -19,7 +19,10 @@ function RegisterForm({accountType}) {
             setProcessing(true);
             fetch(process.env.REACT_APP_SERVER+'/user/register',{
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
                 body: JSON.stringify({login,password,type})
             })
             .then(res => res.json())
