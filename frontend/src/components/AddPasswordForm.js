@@ -14,7 +14,9 @@ function AddPasswordForm({form,passwords,setPasswords}) {
             fetch(process.env.REACT_APP_SERVER+'/password/create',{
                 method: 'POST',
                 headers: {'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + authData.token},
+                    'Authorization': 'Bearer ' + authData.token,
+                    'Access-Control-Allow-Origin': '*'
+                },
                 body: JSON.stringify({password,web_address,login,description})
             })
             .then(res => res.json())

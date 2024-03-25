@@ -17,7 +17,10 @@ function LoginForm() {
             setMessage('Logging in...');
             fetch(process.env.REACT_APP_SERVER+'/user/login',{
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
                 body: JSON.stringify({login,password})
             })
             .then(res => res.json())

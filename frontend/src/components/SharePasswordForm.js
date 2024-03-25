@@ -11,7 +11,8 @@ function SharePasswordForm({form,passwordId}) {
         fetch(process.env.REACT_APP_SERVER+'/user/getAll',{
             headers: {
                 'Authorization': 'Bearer ' + authData.token,
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
             }
         })
         .then(res => res.json())
@@ -21,7 +22,7 @@ function SharePasswordForm({form,passwordId}) {
             }
         })
         .catch(err => console.log(err))
-    },[])
+    },[authData])
 
     const share = (receiverId) => {
         console.log(receiverId)
