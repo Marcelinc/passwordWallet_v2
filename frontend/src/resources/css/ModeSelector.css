@@ -1,0 +1,33 @@
+.modeSelector-container{
+    background-color: rgb(96, 148, 131);
+    border-radius: 1em;
+    padding: 6px;
+    position: relative;
+    width: 100px;
+}
+.modeSelector-container:hover{
+    cursor: pointer;
+}
+
+#mode-input{
+    opacity: 0;
+    height: 0;
+    width: 0;
+}
+
+
+#mode-span::before{
+    width: 50px;
+    height: 80%;
+    background-color: rgb(51, 66, 153);
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    content: "";
+    border-radius: 1em;
+    transition: transform .5s ease;
+}
+
+#mode-input:checked + #mode-span::before{
+    transform: translateY(40px);
+}

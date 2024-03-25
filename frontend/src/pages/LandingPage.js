@@ -16,7 +16,7 @@ function LandingPage() {
   return (
     <div className="container">
         <Nav/>
-        <div className="content landing">
+        <div className="content-land landing">
           <main>
               <section className="appDescript">
                 <h1>Save all your passwords in one place</h1>

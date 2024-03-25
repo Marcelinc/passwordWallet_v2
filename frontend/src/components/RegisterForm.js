@@ -8,7 +8,6 @@ function RegisterForm({accountType}) {
     const [password,setPassword] = useState('')
     const [message,setMessage] = useState('')
     const [processing,setProcessing] = useState(false);
-    const [validateForm,setValidateForm] = useState(false);
 
     const navigation = useNavigate()
 
@@ -28,7 +27,7 @@ function RegisterForm({accountType}) {
                 console.log(res)
                 res.message && setMessage(res.message)
                 if(res.message === 'Success') {
-                    navigation('/login')
+                    navigation('/login',{state: {status: message}})
                 }
             })
             .catch(err => {
@@ -48,12 +47,19 @@ function RegisterForm({accountType}) {
 
     const checkFormValidation = () => {
         let validate = true;
-        if(!login)
+        if(type !== 'hmac' && type !== 'sha512'){
             validate = false;
-        if(!password)
+            setMessage('Select account type');
+        }
+        if(!password || password.length < 5){
             validate = false;
-        if(type !== 'hmac' && type !== 'sha512')
+            setMessage('Password must contain at least 5 characters');
+        }
+        if(!login || login.length < 5){
             validate = false;
+            setMessage('Login must contain at least 5 characters');
+        }
+            
         return validate;
     }
 

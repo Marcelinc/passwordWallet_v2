@@ -33,3 +33,9 @@
     outline: none;
     margin: 15px;
   }
+
+.disabledBttn{
+  cursor: not-allowed !important;
+  transform: none !important;
+  opacity: .5;
+}
