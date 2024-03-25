@@ -1,15 +1,39 @@
+/*UserDash section*/
 .eventTag{
-    color: rgb(126, 128, 17);
+    color: rgb(158, 160, 22);
+    background-color: #3a3c7f;
+    width: fit-content;
+    border-radius: 50%;
+    padding: 10px;
+    font-size: min(max(4vw,16px),40px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-inline: 1em;
+    margin-block: .5em;
+    transition: color .5s ease-in, transform .5s ease-in;
 }
 .eventTag:hover{
     cursor: pointer;
-    color: rgb(114, 116, 15);
+    color: rgb(204, 207, 26);
+    transform: scale(1.5);
 }
 .userInfo{
     background-color:rgb(45, 45, 117);
     color: azure;
     padding: 15px;
+    border-bottom: 1px solid rgb(32, 82, 57);
 }
+.password-operations{
+    background-color:rgb(45, 45, 117);
+    padding: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/*Passwords section*/
 .passwords{
     
     display: grid;
@@ -66,8 +90,15 @@
     color:crimson;
 }
 
+/*Media queries*/
+
 @media screen and (min-width:1240px) {
     .password-list{
         grid-template-columns: 1fr 1fr;
+    }
+}
+@media screen and (max-width: 450px){
+    .eventTag{
+        margin-inline: .5em;
     }
 }

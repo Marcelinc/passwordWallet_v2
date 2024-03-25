@@ -1,5 +1,6 @@
 import { useContext, useState } from "react"
 import { AuthContext } from "../App"
+import { useLocation } from "react-router-dom"
 
 function LoginForm() {
 
@@ -8,9 +9,12 @@ function LoginForm() {
     const [login,setLogin] = useState('')
     const [password,setPassword] = useState('')
     const [message,setMessage] = useState('')
+    const location = useLocation();
+    console.log('location: ' + location)
 
     const submit = () => {
-        if(login && password)
+        if(checkFormValidation()){
+            setMessage('Logging in...');
             fetch(process.env.REACT_APP_SERVER+'/user/login',{
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -27,12 +31,31 @@ function LoginForm() {
                 }
                 setMessage(res.message)
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                console.log(err)
+                setMessage('Cannot log in. Try again later')
+            })
+        }   
+    }
+
+    const checkFormValidation = () => {
+        let validate = true;    
+        if(!password){
+            validate = false;
+            setMessage('Enter login credentials');
+        }
+
+        if(!login || login.length < 5){
+            validate = false;
+            setMessage('Enter login credentials');
+        }
+        return validate
     }
 
   return (
-    <section className="form">
-        <div className="loginForm">
+    <section className="form-container">
+        <h2>Sign in</h2>
+        <div className="form">
             <label className="formElem">
                 <p>Login</p>
                 <input type='text' value={login} onChange={e => setLogin(e.target.value)}/>
@@ -44,7 +67,7 @@ function LoginForm() {
             <label className="formElem">
                 <button onClick={submit} className="submit" >Log in</button>
             </label>
-            {message && <p className="appMessage">{message}</p>}
+            <p className="appMessage">{message}</p>
         </div>
     </section>
   )
