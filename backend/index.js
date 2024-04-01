@@ -24,5 +24,6 @@ connectDB()
 
 app.use('/api/user',require('./routes/userRoutes'))
 app.use('/api/password',require('./routes/passwordRoutes'))
+app.use('/api/websites',require('./routes/websiteRoutes'))
 
 app.listen(PORT,() => console.log('Server is up and running'))
