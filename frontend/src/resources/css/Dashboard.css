@@ -48,7 +48,6 @@
 .password-list{
     display: grid;
     grid-template-columns: 1fr;
-    width: 90vw;
     grid-gap: 20px 20px;
 }
 
@@ -64,6 +63,7 @@
 .attempt-list {
     width: 80vw;
     min-width: 300px;
+    max-width: 1000px;
 }
 .attempt {
     padding: 10px;
@@ -82,7 +82,18 @@
     cursor: pointer;
     opacity: 0.9;
 }
+.attempt-details{
+    opacity: 0;
+    max-height: 0;
+    transition: opacity .5s ease, max-height .7s ease;
+    overflow: hidden;
+}
+.attempt-details.active{
+    opacity: 1;
+    max-height: 200px;
+}
 
+/*Shared passwords*/
 .sharedPassword{
     color:rgb(62, 116, 9);
 }

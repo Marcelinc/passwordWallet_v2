@@ -24,7 +24,7 @@ function SharePasswordForm({form,passwordId}) {
         .catch(err => console.log(err))
     },[authData])
 
-    const share = (receiverId) => {
+    const sharePassword = (receiverId) => {
         console.log(receiverId)
         console.log(passwordId)
         fetch(process.env.REACT_APP_SERVER+'/password/share',{
@@ -43,17 +43,22 @@ function SharePasswordForm({form,passwordId}) {
         .catch(err => console.log(err))
       }
 
+    const exitSharePasswordForm = () => {
+        setMessage('');
+        form(false);
+    }
+
   return (
     <div className='shareForm'>
-        <h1>Share password</h1>
-        <div>
+        <h1 className='popup-header'>Share password</h1>
+        <div className='user-list'>
             {users.length > 0 ? users.map(u => <p key={u._id} className='userToShare'>
                 {u.login}
-                <button onClick={() => share(u._id)}>Share</button>
+                <button onClick={() => sharePassword(u._id)} className='share-bttn'>Share</button>
             </p>) : <p>There are no other users</p>}
         </div>
-        <p id='message' style={{color: 'red'}}>{message}</p>
-        <button onClick={() => form(false)}>Cancel</button>
+        <p id='message' style={{color: 'red'}}>{message === 'Success'}</p>
+        <button onClick={exitSharePasswordForm} className='submit'>Cancel</button>
     </div>
   )
 }

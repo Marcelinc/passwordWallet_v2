@@ -33,7 +33,8 @@ function AddPasswordForm({form,passwords,setPasswords}) {
 
   return (
     <>
-    <section className='form passwordForm'>
+    <h2 className='popup-header'>Add password</h2>
+    <section className='form passwordForm'> 
         <label className="formElem">
             <p>Password</p>
             <input type='password' value={password} onChange={e => setPassword(e.target.value)}/>

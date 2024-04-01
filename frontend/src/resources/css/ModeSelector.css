@@ -1,33 +1,37 @@
 .modeSelector-container{
-    background-color: rgb(96, 148, 131);
+    background-color: rgb(44, 168, 117);
     border-radius: 1em;
-    padding: 6px;
     position: relative;
-    width: 100px;
-}
-.modeSelector-container:hover{
+    width: fit-content;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-block: 1em;
 }
 
-#mode-input{
-    opacity: 0;
-    height: 0;
-    width: 0;
-}
-
-
-#mode-span::before{
-    width: 50px;
-    height: 80%;
-    background-color: rgb(51, 66, 153);
-    position: absolute;
-    top: 4px;
-    left: 4px;
+.mode-span{
+    font-size: 1.6em;
+    transition: .4s;
+    background-color: rgb(63, 113, 126);
     content: "";
-    border-radius: 1em;
-    transition: transform .5s ease;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    color: rgb(160, 134, 19);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 4px;
+}
+.mode-text{
+    padding: .5em 1em;
 }
 
-#mode-input:checked + #mode-span::before{
-    transform: translateY(40px);
+.mode-input:checked + .mode-span{
+    transform: translateX(34px);
+}
+
+.mode-input{
+    display: none;
 }

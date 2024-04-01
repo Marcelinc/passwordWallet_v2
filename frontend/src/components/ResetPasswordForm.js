@@ -18,8 +18,11 @@ function ResetPasswordForm({form,setPasswords}) {
             console.log('sending data..')
             fetch(process.env.REACT_APP_SERVER+'/user/resetPassword',{
                 method: 'POST',
-                headers: {'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + authData.token},
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + authData.token,
+                    'Access-Control-Allow-Origin': '*'
+                },
                 body: JSON.stringify({
                     oldPassword: actualPassword,
                     newPassword: password,
@@ -58,12 +61,13 @@ function ResetPasswordForm({form,setPasswords}) {
 
     }
 
-    const handleEncryptType = e => {
+    /*const handleEncryptType = e => {
         setType(e.target.value)
-    }
+    }*/
 
   return (
     <div className="form passwordForm">
+        <h2 className="popup-header">Change your main password</h2>
         <label className="formElem">
             <p>Enter your actual password</p>
             <input type='password' value={actualPassword} onChange={e => setActualPassword(e.target.value)}/>
