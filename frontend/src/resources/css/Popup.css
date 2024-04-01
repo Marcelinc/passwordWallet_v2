@@ -13,3 +13,7 @@
     background-color: #c1b09cf0;
     min-width: 300px;
   }
+.popup-header{
+  text-align: center;
+  margin: .5em 1em;
+}
