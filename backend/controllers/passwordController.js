@@ -47,7 +47,7 @@ const createPassword = asyncHandler(async (req,res) => {
 const getAll = asyncHandler(async (req,res) => {
     const id = req.user._id
 
-    const passwords = await Password.find({id_user: id})
+    const passwords = await Password.find({id_user: id}).populate('web_address');
     if(passwords)
        res.status(200).json({message: 'Success', data: passwords})
     //else res.status(500).json({message: 'Problem with access to data'})

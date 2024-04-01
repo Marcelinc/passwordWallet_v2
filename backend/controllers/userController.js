@@ -69,19 +69,20 @@ const registerUser = asyncHandler(async (req,res) => {
 // @access Public
 const loginUser = asyncHandler(async (req,res) => {
     const {login,password} = req.body
-    var correct,locked
-    var device = req.headers['user-agent']
+    let correct,locked
+    let device = req.headers['user-agent']
+    let ipClient = req.header('x-forwarded-for') || req.socket.remoteAddress;
 
     //Check for user's login
     const user = await User.findOne({login})
     if(user){
 
         //check if ip address exists
-        var ipAddress = await IPAddress.findOne({addressIP: req.ip, user_id: user._id})
+        let ipAddress = await IPAddress.findOne({addressIP: ipClient, user_id: user._id})
 
         //save new address info
         if(!ipAddress){
-            ipAddress = await IPAddress.create({addressIP: req.ip, user_id: user._id})
+            ipAddress = await IPAddress.create({addressIP: ipClient, user_id: user._id})
         } 
         
         //account not locked permanent

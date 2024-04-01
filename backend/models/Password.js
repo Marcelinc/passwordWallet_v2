@@ -11,7 +11,8 @@ const passwordSchema = mongoose.Schema({
         require: true
     },
     web_address: {
-        type: String,
+        type: mongoose.Types.ObjectId,
+        ref: 'Website',
         require: true
     },
     description: {
