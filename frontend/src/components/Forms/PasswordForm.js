@@ -1,5 +1,5 @@
 import { useContext, useState } from "react"
-import { AuthContext } from "../App"
+import { AuthContext } from "../../App"
 
 function PasswordForm({form,show}) {
 
@@ -7,7 +7,7 @@ function PasswordForm({form,show}) {
     const authData = useContext(AuthContext)
 
     const changePassword = () => {
-        if(password != ''){
+        if(password !== ''){
             authData.setPassword(password)
             form(false)
             //show()

@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { AuthContext } from "../App"
-import AddPasswordForm from "../components/AddPasswordForm"
+import AddPasswordForm from "../components/Forms/AddPasswordForm"
 import Nav from "../components/Nav"
 import Popup from '../components/Popup'
-import ResetPasswordForm from "../components/ResetPasswordForm"
+import ResetPasswordForm from "../components/Forms/ResetPasswordForm"
 import '../resources/css/Dashboard.css'
 import { GrShieldSecurity } from 'react-icons/gr'
 import { IoWalletSharp } from 'react-icons/io5'

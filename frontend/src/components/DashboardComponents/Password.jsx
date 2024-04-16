@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../../App'
 import '../../resources/css/Password.css'
-import PasswordForm from '../PasswordForm'
+import PasswordForm from '../Forms/PasswordForm'
 import Popup from '../Popup'
-import SharePasswordForm from '../SharePasswordForm'
+import SharePasswordForm from '../Forms/SharePasswordForm'
 
 function Password({data,mode}) {
 
@@ -54,7 +54,7 @@ function Password({data,mode}) {
         <h2>Website: {data.web_address.name}</h2>
         <p className='website-info'>
           Login: {data.login ? data.login : 'Not set'}
-          <span>
+          <span className='password-field'>
             Password: {decrypted ? decrypted : data.password} 
           </span>
         </p>

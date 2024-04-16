@@ -28,15 +28,19 @@ const createPassword = asyncHandler(async (req,res) => {
     
             //Create and save password
             const newPassword = await Password.create({password:hash,id_user: id, web_address, description: nullableElements.description, login: nullableElements.login })
-    
+            //console.log(newPassword)
+            const newPasswordPopulated = await newPassword.populate('web_address');
             if(newPassword)
-                res.status(200).json({message: 'Success',data:newPassword})
-            else res.status(500).json({message: 'Addind new password failed'})
+                res.status(200).json({message: 'Success',data:newPasswordPopulated})
+            else {
+                res.status(500).json({message: 'Addind new password failed'})
+                
+            }
         }
         else res.status(500).json({message: 'Failed during creating password'})
         
     }
-    else res.status(500).json({message: 'Adding new password failed'})
+    else res.status(500).json({message: 'Adding new password failed. Bad data'})
     
 })
 
@@ -157,6 +161,7 @@ const elements = (desc,login) => {
 }
 
 const validate = (password,address) => {
+    console.log('validate', password, address)
     var validate = true
     if(!password || password === '')
         validate = false

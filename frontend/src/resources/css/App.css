@@ -24,6 +24,7 @@
 .appMessage{
     color:rgb(66, 8, 8);
     padding: 1em;
+    text-align: center;
 }
 
 @media screen and (min-width: 1650px) {

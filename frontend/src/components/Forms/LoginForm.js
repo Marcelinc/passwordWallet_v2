@@ -1,5 +1,5 @@
 import { useContext, useState } from "react"
-import { AuthContext } from "../App"
+import { AuthContext } from "../../App"
 import { useLocation } from "react-router-dom"
 
 function LoginForm() {
@@ -48,7 +48,7 @@ function LoginForm() {
             setMessage('Enter login credentials');
         }
 
-        if(!login || login.length < 5){
+        if(!login){
             validate = false;
             setMessage('Enter login credentials');
         }

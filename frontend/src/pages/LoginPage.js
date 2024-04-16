@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AuthContext } from '../App'
-import LoginForm from '../components/LoginForm'
+import LoginForm from '../components/Forms/LoginForm'
 import Nav from '../components/Nav'
 import '../resources/css/FormPage.css'
 

@@ -6,7 +6,7 @@ const Website = require("../models/Website");
 const getWebsites = async(req, res) => {
     try{
         const websites = await Website.find();
-        console.log(websites);
+        //console.log(websites);
         if(websites.length > 0) {
             res.status(200).json({message: 'Success',websites});
         } else{

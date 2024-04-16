@@ -2,7 +2,7 @@ import { useContext, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { AuthContext } from '../App'
 import Nav from '../components/Nav'
-import RegisterForm from '../components/RegisterForm'
+import RegisterForm from '../components/Forms/RegisterForm'
 import '../resources/css/FormPage.css'
 
 function RegisterPage() {
