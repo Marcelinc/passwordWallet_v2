@@ -22,7 +22,7 @@ const createPassword = asyncHandler(async (req,res) => {
             const hash = AES.encrypt(password,key)
 
             //Add nullable elements
-            var nullableElements = elements(web_address,description,login)
+            var nullableElements = elements(description,login)
     
     
     
