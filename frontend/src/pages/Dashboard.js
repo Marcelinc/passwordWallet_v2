@@ -1,9 +1,9 @@
-import { useContext, useEffect, useState } from "react"
+import { createContext, useContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { AuthContext } from "../App"
 import AddPasswordForm from "../components/Forms/AddPasswordForm"
 import Nav from "../components/Nav"
-import Popup from '../components/Popup'
+import Popup from '../components/Popups/Popup'
 import ResetPasswordForm from "../components/Forms/ResetPasswordForm"
 import '../resources/css/Dashboard.css'
 import { GrShieldSecurity } from 'react-icons/gr'
@@ -15,19 +15,24 @@ import ModeSelector from "../components/ModeSelector"
 import PasswordSection from "../components/DashboardComponents/PasswordSection"
 import SecuritySection from "../components/DashboardComponents/SecuritySection"
 import SharedPasswordSection from "../components/DashboardComponents/SharedPasswordSection"
+import MessagePopup from "../components/Popups/MessagePopup"
+
+export const ModeContext = createContext();
 
 function Dashboard() {
 
-  const authData = useContext(AuthContext)
-  const [passwords,setPasswords] = useState([])
-  const [loginAttempts,setAttempts] = useState([])
-  const [sharedPasswords,setShared] = useState([])
-  const [passwordForm,setPasswordForm] = useState(false)
-  const [mainPasswordForm,setMainForm] = useState(false)
-  const [content,setContent] = useState('passwords')
+  const authData = useContext(AuthContext);
+  const [passwords,setPasswords] = useState([]);
+  const [loginAttempts,setAttempts] = useState([]);
+  const [sharedPasswords,setShared] = useState([]);
+  const [passwordForm,setPasswordForm] = useState(false);
+  const [mainPasswordForm,setMainForm] = useState(false);
+  const [content,setContent] = useState('passwords');
 
-  const [mode,setMode] = useState('Read')
-  const navigation = useNavigate()
+  const [mode,setMode] = useState('Read');
+  const [displayMessage,setDisplayMessage] = useState(`You are now in ${mode} mode`);
+  const [isDisplayedMsg,setIsDisplayedMsg] = useState(false);
+  const navigation = useNavigate();
 
   useEffect(() => {
     !authData.logged && navigation('/login')
@@ -87,44 +92,50 @@ function Dashboard() {
     if(mode === 'Edit'){
       setMode('Read')
     }
+    setIsDisplayedMsg(true);
   }
 
   return (
     <div className="container">
       <Nav/>
       <div className="content">
-        <main>
-            <section className="userDash">
-              <div className="userInfo">
-                <h2>Hello {authData.login}</h2>
-                <p>Account type: {authData.isHmac ? 'HMAC' : 'SHA512'}</p>
-                <p>Your passwords: {passwords ? passwords.length : '0'}</p>
-                
-                {<ModeSelector mode={mode} onClickHandler={changeMode}/>}
-              </div>
-              <div className="password-operations">
-                <p onClick={() => setContent('security')} className="eventTag" title="Security">
-                  <GrShieldSecurity />
-                </p>
-                <p onClick={() => setContent('passwords')} className="eventTag" title="My passwords">
-                  <IoWalletSharp />
-                </p>
-                <p onClick={() => setContent('sharedPasswords')} className="eventTag" title="Sharing passwords">
-                  <RiUserSharedFill />
-                </p>
-                <p onClick={() => setPasswordForm(true)} className='eventTag' title="Add new">
-                  <RiAddCircleFill />
-                </p>
-                <p onClick={() => {mode === 'Edit' && setMainForm(true)}} className={(mode === 'Read' ? 'disabledBttn ' : '') +'eventTag'} title="Change main password">
-                  <RiLockPasswordLine />
-                </p>
-              </div>
-            </section>
-            {content === 'passwords' ? <PasswordSection passwords={passwords} mode={mode}/> : 
-            content === 'security' ? <SecuritySection loginAttempts={loginAttempts}/> : <SharedPasswordSection sharedPasswords={sharedPasswords}/>}
-            {passwordForm && <Popup><AddPasswordForm form={setPasswordForm} setPasswords={setPasswords} passwords={passwords} /></Popup>}
-            {mainPasswordForm && <Popup><ResetPasswordForm form={setMainForm} setPasswords={setPasswords}/></Popup>}
-        </main>
+        <ModeContext.Provider value={{mode,setMode}}>
+          <main>
+              <section className="userDash">
+                <div className="userInfo">
+                  <h2>Hello {authData.login}</h2>
+                  <p>Account type: {authData.isHmac ? 'HMAC' : 'SHA512'}</p>
+                  <p>Your passwords: {passwords ? passwords.length : '0'}</p>
+                  
+                  {<ModeSelector mode={mode} onClickHandler={changeMode}/>}
+                </div>
+                <div className="password-operations">
+                  <p onClick={() => setContent('security')} className="eventTag" title="Security">
+                    <GrShieldSecurity />
+                  </p>
+                  <p onClick={() => setContent('passwords')} className="eventTag" title="My passwords">
+                    <IoWalletSharp />
+                  </p>
+                  <p onClick={() => setContent('sharedPasswords')} className="eventTag" title="Sharing passwords">
+                    <RiUserSharedFill />
+                  </p>
+                  <p onClick={() => setPasswordForm(true)} className='eventTag' title="Add new">
+                    <RiAddCircleFill />
+                  </p>
+                  <p onClick={() => {mode === 'Edit' && setMainForm(true)}} className={(mode === 'Read' ? 'disabledBttn ' : '') +'eventTag'} title="Change main password">
+                    <RiLockPasswordLine />
+                  </p>
+                </div>
+              </section>
+              {content === 'passwords' ? <PasswordSection passwords={passwords}/> : 
+              content === 'security' ? <SecuritySection loginAttempts={loginAttempts}/> : <SharedPasswordSection sharedPasswords={sharedPasswords}/>}
+
+              
+              {passwordForm && <Popup><AddPasswordForm form={setPasswordForm} setPasswords={setPasswords} passwords={passwords} /></Popup>}
+              {mainPasswordForm && <Popup><ResetPasswordForm form={setMainForm} setPasswords={setPasswords}/></Popup>}
+          </main>
+          <MessagePopup message={displayMessage} isActive={isDisplayedMsg}/>
+        </ModeContext.Provider>
       </div>
     </div>
   )

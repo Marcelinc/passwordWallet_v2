@@ -129,14 +129,14 @@ const sharePassword = asyncHandler(async (req,res) => {
 // @access Private
 const getShared = asyncHandler(async (req,res) => {
     const id_receiver = req.user.id
-    var returnDecodedShare
+    let returnDecodedShare
 
-    const shared = await SharedPassword.find({id_receiver, status: 'valid'}).populate('id_owner','login').populate('id_password')
+    const shared = await SharedPassword.find({id_receiver, status: 'valid'}).populate('id_owner','login').populate({path:'id_password',populate: 'web_address'})
     if(shared){
         if(shared.length > 0){
             //decode password
-            var mainPassword = await User.findById(shared[0].id_owner._id,'password isPasswordKeptAsHmac')
-            var key = calculateMD5(mainPassword.password)
+            let mainPassword = await User.findById(shared[0].id_owner._id,'password isPasswordKeptAsHmac')
+            let key = calculateMD5(mainPassword.password)
             if(key && key != 'Failed'){
                 returnDecodedShare = shared.map(sh => {return {sh,decryptedPassword : AES.decrypt(sh.id_password.password,key).toString(enc.Utf8)}})
             }

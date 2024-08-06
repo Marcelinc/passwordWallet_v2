@@ -1,4 +1,3 @@
-import '../resources/css/Popup.css'
 function Popup(props) {
   return (
     <div className="popup-bg">

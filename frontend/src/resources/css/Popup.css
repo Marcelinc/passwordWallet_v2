@@ -1,3 +1,4 @@
+/*Main popup*/
 .popup-bg {
     position: absolute;
     width: 100%;
@@ -13,7 +14,42 @@
     background-color: #c1b09cf0;
     min-width: 300px;
   }
+
+
+
 .popup-header{
   text-align: center;
   margin: .5em 1em;
+}
+
+/**Message popup*/
+.message-popup{
+  background-color: white;
+  color: black;
+  width: fit-content;
+  border-radius: 2em;
+  position: sticky;
+  bottom: 1em;
+  margin: auto;
+  padding: 1em;
+  opacity: 1;
+  overflow: hidden;
+  visibility: hidden;
+  position: absolute;
+  left: 0;
+  right: 0;
+  animation: displayMessagePopup 7s ease-in;
+}
+
+@keyframes displayMessagePopup {
+  0%{
+    visibility: visible;
+    opacity: 0;
+  }
+  20%{
+    opacity: 1;
+  }
+  100%{
+    opacity: 0;
+  }
 }
