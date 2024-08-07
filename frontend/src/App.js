@@ -7,8 +7,9 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import Loader from './components/Loader';
 import '../src/resources/css/Forms.css';
+import '../src/resources/css/Popup.css';
 
-export const AuthContext = createContext()
+export const AuthContext = createContext();
 
 function App() {
 

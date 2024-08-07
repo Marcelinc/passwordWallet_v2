@@ -1,24 +1,26 @@
 import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../../App'
+import { ModeContext } from "../../pages/Dashboard"
 import '../../resources/css/Password.css'
 import PasswordForm from '../Forms/PasswordForm'
-import Popup from '../Popup'
+import Popup from '../Popups/Popup'
 import SharePasswordForm from '../Forms/SharePasswordForm'
 
-function Password({data,mode}) {
+function Password({data}) {
 
   const [decrypted,setDecrypted] = useState('')
   const [notAllowed,setNotAllowed] = useState(false);
   const [form,setForm] = useState(false)
   const [shareForm,setShareForm] = useState(false)
   const authData = useContext(AuthContext)
+  const modeContext = useContext(ModeContext);
 
   useEffect(() => {
     setDecrypted('')
   },[])
 
   const show = () => {
-    if(mode === 'Edit'){
+    if(modeContext.mode === 'Edit'){
       if(!authData.password || authData.password === '' || notAllowed)
       setForm(true)
     
@@ -58,8 +60,8 @@ function Password({data,mode}) {
             Password: {decrypted ? decrypted : data.password} 
           </span>
         </p>
-        {decrypted ? <button onClick={() => setDecrypted('')}>Hide</button> : <button className='showPassword' onClick={show} disabled={mode === 'Read'}>Show</button>}
-          <button className='sharePassword' onClick={() => {mode === 'Edit' && setShareForm(true)}} disabled={mode === 'Read'}>Share</button>
+        {decrypted ? <button onClick={() => setDecrypted('')}>Hide</button> : <button className='showPassword' onClick={show} disabled={modeContext.mode === 'Read'}>Show</button>}
+          <button className='sharePassword' onClick={() => {modeContext.mode === 'Edit' && setShareForm(true)}} disabled={modeContext.mode === 'Read'}>Share</button>
         {form && <Popup><PasswordForm form={setForm} show={show}/></Popup>}
         {shareForm && <Popup><SharePasswordForm form={setShareForm} passwordId={data._id}/></Popup>}
       </div>
