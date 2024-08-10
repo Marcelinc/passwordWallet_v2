@@ -3,7 +3,7 @@ import SharedPassword from './SharedPassword'
 
 const SharedPasswordSection = ({sharedPasswords}) => {
   useEffect(() => {
-    console.log('Shared Passwords', sharedPasswords)
+    //console.log('Shared Passwords', sharedPasswords)
   },[])
   return (
     <section className="passwords">

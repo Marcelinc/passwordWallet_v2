@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react'
 import { AuthContext } from '../../App'
-import LoaderDots from '../LoaderDots';
+import LoaderDots from '../Loader/LoaderDots';
 
 function SharePasswordForm({form,passwordId}) {
 

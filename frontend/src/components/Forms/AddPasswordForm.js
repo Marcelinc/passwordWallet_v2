@@ -1,7 +1,7 @@
 import {useContext, useEffect, useState} from 'react'
 import { AuthContext } from '../../App'
 import '../../resources/css/PasswordForm.css'
-import LoaderDots from '../LoaderDots'
+import LoaderDots from '../Loader/LoaderDots'
 function AddPasswordForm({form,passwords,setPasswords}) {
 
     const [password,setPassword] = useState('')

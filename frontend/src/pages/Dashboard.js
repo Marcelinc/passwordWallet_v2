@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { AuthContext } from "../App"
+import { AuthContext, MessagePopupContext } from "../App"
 import AddPasswordForm from "../components/Forms/AddPasswordForm"
 import Nav from "../components/Nav"
 import Popup from '../components/Popups/Popup'
@@ -11,7 +11,7 @@ import { IoWalletSharp } from 'react-icons/io5'
 import { RiUserSharedFill } from 'react-icons/ri'
 import { RiAddCircleFill } from "react-icons/ri"
 import { RiLockPasswordLine } from "react-icons/ri"
-import ModeSelector from "../components/ModeSelector"
+import ModeSelector from "../components/DashboardComponents/ModeSelector"
 import PasswordSection from "../components/DashboardComponents/PasswordSection"
 import SecuritySection from "../components/DashboardComponents/SecuritySection"
 import SharedPasswordSection from "../components/DashboardComponents/SharedPasswordSection"
@@ -22,6 +22,7 @@ export const ModeContext = createContext();
 function Dashboard() {
 
   const authData = useContext(AuthContext);
+  const messagePopup = useContext(MessagePopupContext);
   const [passwords,setPasswords] = useState([]);
   const [loginAttempts,setAttempts] = useState([]);
   const [sharedPasswords,setShared] = useState([]);
@@ -30,8 +31,6 @@ function Dashboard() {
   const [content,setContent] = useState('passwords');
 
   const [mode,setMode] = useState('Read');
-  const [displayMessage,setDisplayMessage] = useState(`You are now in ${mode} mode`);
-  const [isDisplayedMsg,setIsDisplayedMsg] = useState(false);
   const navigation = useNavigate();
 
   useEffect(() => {
@@ -47,7 +46,7 @@ function Dashboard() {
     .then(res => res.json())
     .then(res => {
       if(res.message === 'Success')
-        console.log('passwords: ',res.data)
+        //console.log('passwords: ',res.data)
         setPasswords(res.data)
     })
     .catch(err => console.log(err))
@@ -63,7 +62,7 @@ function Dashboard() {
     .then(res => res.json())
     .then(res => {
       if(res.message === 'Success')
-        console.log('attempts: ',res.data.reverse())
+        //console.log('attempts: ',res.data.reverse())
         setAttempts(res.data)
     })
     .catch(err => console.log(err))
@@ -76,7 +75,6 @@ function Dashboard() {
     })
     .then(res => res.json())
     .then(res => {
-      console.log('shared: ',res)
       if(res.message === 'Success'){
         setShared(res.data)
       }
@@ -92,7 +90,8 @@ function Dashboard() {
     if(mode === 'Edit'){
       setMode('Read')
     }
-    setIsDisplayedMsg(true);
+    messagePopup.setMessage(`You are now in ${mode} mode`);
+    messagePopup.setIsActive(true);
   }
 
   return (
@@ -134,7 +133,7 @@ function Dashboard() {
               {passwordForm && <Popup><AddPasswordForm form={setPasswordForm} setPasswords={setPasswords} passwords={passwords} /></Popup>}
               {mainPasswordForm && <Popup><ResetPasswordForm form={setMainForm} setPasswords={setPasswords}/></Popup>}
           </main>
-          <MessagePopup message={displayMessage} isActive={isDisplayedMsg}/>
+          <MessagePopup/>
         </ModeContext.Provider>
       </div>
     </div>
