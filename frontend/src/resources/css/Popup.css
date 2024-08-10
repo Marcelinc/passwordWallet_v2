@@ -24,6 +24,7 @@
 
 /**Message popup*/
 .message-popup{
+  display: block;
   background-color: white;
   color: black;
   width: fit-content;
@@ -32,13 +33,20 @@
   bottom: 1em;
   margin: auto;
   padding: 1em;
-  opacity: 1;
-  overflow: hidden;
-  visibility: hidden;
   position: absolute;
   left: 0;
   right: 0;
-  animation: displayMessagePopup 7s ease-in;
+  overflow: hidden;
+}
+.message-popup.hidden{
+  opacity: 0;
+  visibility: hidden;
+  animation: hideMessagePopup 2s ease-out;
+}
+.message-popup.active{
+  opacity: 1;
+  /*visibility: hidden;*/
+  animation: displayMessagePopup 1s ease-in;
 }
 
 @keyframes displayMessagePopup {
@@ -46,10 +54,17 @@
     visibility: visible;
     opacity: 0;
   }
-  20%{
+  100%{
+    opacity: 1;
+  }
+}
+@keyframes hideMessagePopup {
+  0%{
+    visibility: visible;
     opacity: 1;
   }
   100%{
     opacity: 0;
+    visibility: hidden;
   }
 }

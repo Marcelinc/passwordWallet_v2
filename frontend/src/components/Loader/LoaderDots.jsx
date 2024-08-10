@@ -1,4 +1,4 @@
-import '../resources/css/LoaderDots.css';
+import '../../resources/css/LoaderDots.css';
 
 const LoaderDots = () => {
   return (
