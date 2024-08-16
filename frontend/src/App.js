@@ -11,6 +11,7 @@ import '../src/resources/css/Popup.css';
 
 export const AuthContext = createContext();
 export const MessagePopupContext = createContext();
+export const MESSAGE_POPUP_TIMER = 3000;
 
 function App() {
 
@@ -33,7 +34,7 @@ function App() {
     popupTimeout.current = setTimeout(() => {
       setIsActivePopupMessage(false);
       popupTimeout.current = null;
-    },3000)
+    },MESSAGE_POPUP_TIMER)
   }
 
 
