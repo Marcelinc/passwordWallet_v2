@@ -30,7 +30,8 @@ function RegisterForm({accountType}) {
                 console.log(res)
                 res.message && setMessage(res.message)
                 if(res.message === 'Success') {
-                    navigation('/login',{state: {status: message}})
+                    sessionStorage.setItem('account_created',true);
+                    navigation('/login',{state: {message: 'Account created'}})
                 }
             })
             .catch(err => {

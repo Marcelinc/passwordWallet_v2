@@ -10,7 +10,7 @@ function LoginForm() {
     const [password,setPassword] = useState('')
     const [message,setMessage] = useState('')
     const location = useLocation();
-    console.log('location: ' + location)
+    //console.log('location: ' + location)
 
     const submit = () => {
         if(checkFormValidation()){

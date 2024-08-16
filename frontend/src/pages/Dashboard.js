@@ -34,6 +34,11 @@ function Dashboard() {
   const navigation = useNavigate();
 
   useEffect(() => {
+    messagePopup.setMessage(`You are now in ${mode} mode`)
+    messagePopup.setIsActive(true)
+  },[])
+
+  useEffect(() => {
     !authData.logged && navigation('/login')
 
     //Fetch passwords from db

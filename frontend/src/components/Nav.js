@@ -1,6 +1,6 @@
 import { useContext } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { AuthContext } from "../App"
+import { AuthContext, MessagePopupContext } from "../App"
 import '../resources/css/Nav.css'
 
 function Nav() {
@@ -16,13 +16,14 @@ function Nav() {
     })
     .then(res => res.json())
     .then(res => {
-      console.log(res)
-      authData.setToken('')
-      window.localStorage.setItem('userToken','')
-      authData.setLogged(false)
-      navigation('/login')
+      if(res.message === 'Success') {
+        sessionStorage.setItem('logout', true);
+        authData.setToken('')
+        window.localStorage.setItem('userToken','')
+        authData.setLogged(false)
+        navigation('/login',{state: {message: 'Logged out'}})
+      }
     })
-    
   }
 
   return (
