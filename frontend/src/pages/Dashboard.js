@@ -36,7 +36,7 @@ function Dashboard() {
   useEffect(() => {
     messagePopup.setMessage(`You are now in ${mode} mode`)
     messagePopup.setIsActive(true)
-  },[])
+  },[mode])
 
   useEffect(() => {
     !authData.logged && navigation('/login')
